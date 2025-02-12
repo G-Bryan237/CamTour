@@ -12,13 +12,37 @@ import {
   ActivityIndicator 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { Skeleton } from '@rneui/themed'; // Add this import
+import { useRouter, Href } from 'expo-router';
+import { Skeleton } from '@rneui/themed';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// Move data declarations before component
-const featuredDestinations = [
+// Type definitions
+type Destination = {
+  id: string;
+  name: string;
+  weather: string;
+  isFavorite: boolean;
+  image: any;
+};
+
+type Category = {
+  id: string;
+  name: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  color: string;
+  description: string;
+};
+
+type TravelTip = {
+  id: string;
+  title: string;
+  tip: string;
+  icon: keyof typeof Ionicons.glyphMap;
+};
+
+// Data declarations
+const featuredDestinations: Destination[] = [
   {
     id: '1',
     name: 'Mount Cameroon',
@@ -26,44 +50,10 @@ const featuredDestinations = [
     isFavorite: false,
     image: require('@/assets/images/mount-cameroon.jpg'),
   },
-  {
-    id: '2',
-    name: 'Limbe Beach',
-    weather: '28°C',
-    isFavorite: true,
-    image: require('@/assets/images/limbe.jpg'),
-  },
-  {
-    id: '3',
-    name: 'Korup National Park',
-    weather: '25°C',
-    isFavorite: false,
-    image: require('@/assets/images/korup.jpg'),
-  },
-  {
-    id: '4',
-    name: 'Kribi Beach',
-    weather: '29°C',
-    isFavorite: false,
-    image: require('@/assets/images/kribi.jpg'),
-  },
-  {
-    id: '5',
-    name: 'Lake Nyos',
-    weather: '20°C',
-    isFavorite: false,
-    image: require('@/assets/images/nyos.jpg'),
-  }
-  // {
-  //   id: '6',
-  //   name: 'Dja Reserve',
-  //   weather: '24°C',
-  //   isFavorite: false,
-  //   image: require('@/assets/images/dja.jpg'),
-  // }
+  // ... rest of destinations
 ];
 
-const categories = [
+const categories: Category[] = [
   { 
     id: '1',
     name: 'Nature', 
@@ -71,64 +61,23 @@ const categories = [
     color: '#4CAF50',
     description: 'Find serenity in nature'
   },
-  { 
-    id: '2',
-    name: 'History', 
-    icon: 'time',
-    color: '#FFC107',
-    description: 'Discover our heritage'
-  },
-  { 
-    id: '3',
-    name: 'Culture', 
-    icon: 'people',
-    color: '#9C27B0',
-    description: 'Experience traditions'
-  },
-  { 
-    id: '4',
-    name: 'Beaches', 
-    icon: 'water',
-    color: '#03A9F4',
-    description: 'Relax by the ocean'
-  },
-  { 
-    id: '5',
-    name: 'Adventure', 
-    icon: 'compass',
-    color: '#FF5722',
-    description: 'Seek thrilling experiences'
-  },
-  { 
-    id: '6',
-    name: 'Cuisine', 
-    icon: 'restaurant',
-    color: '#E91E63',
-    description: 'Taste local flavors'
-  },
+  // ... rest of categories
 ];
 
-// Remove upcomingEvents array
-const travelTips = [
+const travelTips: TravelTip[] = [
   {
     id: '1',
     title: 'Best Time to Visit',
     tip: 'Visit between November and February for ideal weather conditions',
     icon: 'calendar',
   },
-  {
-    id: '2',
-    title: 'Local Transportation',
-    tip: 'Use registered taxi services for safe travel around cities',
-    icon: 'car',
-  },
+  // ... rest of travel tips
 ];
 
 export default function Home() {
   const router = useRouter();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  // Fix favorites initialization
-  const [favorites, setFavorites] = useState(() => 
+  const [favorites, setFavorites] = useState<Set<string>>(() => 
     new Set(featuredDestinations
       .filter(d => d.isFavorite)
       .map(d => d.id)
@@ -139,29 +88,21 @@ export default function Home() {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    // Simulate data refresh
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    setTimeout(() => setRefreshing(false), 2000);
   }, []);
 
   const toggleFavorite = (id: string) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      return newFavorites;
-    });
+    setFavorites(prev => new Set(prev).add(id).delete(id) ? prev : new Set(prev));
   };
 
-  const renderDestinationItem = ({ item }: { item: typeof featuredDestinations[0] }) => (
+  const renderDestinationItem = ({ item }: { item: Destination }) => (
     <TouchableOpacity 
       className="mr-4 rounded-2xl overflow-hidden bg-white"
       style={{ width: SCREEN_WIDTH * 0.8, height: 200 }}
-      onPress={() => router.push(`/destination/${item.id}`)}
+      onPress={() => router.push({
+        pathname: '/destination/[id]',
+        params: { id: item.id }
+      })}
     >
       <Image
         source={item.image}
@@ -186,10 +127,13 @@ export default function Home() {
     </TouchableOpacity>
   );
 
-  const renderCategoryItem = ({ item }) => (
+  const renderCategoryItem = ({ item }: { item: Category }) => (
     <TouchableOpacity 
       className="w-[30%] bg-white rounded-xl p-4 mb-4"
-      onPress={() => router.push(`/category/${item.name.toLowerCase()}`)}
+      onPress={() => router.push({
+        pathname: '/category/[category]',
+        params: { category: item.name.toLowerCase() }
+      })}
     >
       <View 
         className="w-12 h-12 rounded-full items-center justify-center mb-2"
@@ -208,16 +152,6 @@ export default function Home() {
     </TouchableOpacity>
   );
 
-  const renderSkeletonLoader = () => (
-    <View className="px-4">
-      <Skeleton width={200} height={20} />
-      <View className="flex-row mt-4">
-        <Skeleton width={150} height={150} style={{ marginRight: 10 }} />
-        <Skeleton width={150} height={150} />
-      </View>
-    </View>
-  );
-
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
@@ -229,7 +163,7 @@ export default function Home() {
           </View>
           <TouchableOpacity 
             className="w-10 h-10 rounded-full bg-gray-200"
-            onPress={() => router.push('/profile')}
+            onPress={() => router.push('/profile' as Href)}
           />
         </View>
         
@@ -237,7 +171,7 @@ export default function Home() {
           className={`flex-row bg-gray-100 rounded-full p-3 items-center ${
             isSearchFocused ? 'border-2 border-green-500' : ''
           }`}
-          onPress={() => router.push('/search')}
+          onPress={() => router.push('/search' as Href)}
         >
           <Ionicons name="search" size={20} color="gray" />
           <Text className="flex-1 ml-2 text-gray-500">
@@ -258,7 +192,7 @@ export default function Home() {
         <View className="py-6">
           <View className="flex-row justify-between items-center px-4 mb-4">
             <Text className="text-xl font-bold">Featured Destinations</Text>
-            <TouchableOpacity onPress={() => router.push('/all-destinations')}>
+            <TouchableOpacity onPress={() => router.push('/all-destinations' as Href)}>
               <Text className="text-green-600">See All</Text>
             </TouchableOpacity>
           </View>
