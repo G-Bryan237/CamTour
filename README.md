@@ -27,14 +27,14 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Screens
 - [Home] 
-   ![Home](./screenshots/Home.jpg)
+   ![Home](./Screenshots/Home.jpg)
 
 - [Events] 
-   ![Events](./screenshots/Events.jpg)
-   ![Events](./screenshots/Events2.jpg)
+   ![Events](./Screenshots/Events.jpg)
+   ![Events](./Screenshots/Events2.jpg)
 
 - [Map] 
-   ![Map](./screenshots/Map.jpg)
+   ![Map](./Screenshots/Map.jpg)
 
 ## Notes
    There app is not completed just the front end have been developed, More modifications are Coming soon.
