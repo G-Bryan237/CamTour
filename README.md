@@ -27,7 +27,7 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Screens
 - [Home]
-- <div align="center"> <img src="Screenshots/Home.jpg" width="300" /> </div>
+- <div align="center"> <img src="Screenshots/Home.jpg" width="200" /> </div>
 - [Events] 
    <div align="center"> <img src="Screenshots/Event.jpg" width="200" /> </div>
    
