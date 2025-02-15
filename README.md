@@ -27,15 +27,13 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Screens
 - [Home]
-- <div align="center"> <img src="Screenshots/Home.jpg" width="300" /> </div> ```
-   ![Home](./Screenshots/Home.jpg =100*100)
-
+- <div align="center"> <img src="Screenshots/Home.jpg" width="300" /> </div>
 - [Events] 
-   ![Events](./Screenshots/Events.jpg =100*100)
-   ![Events](./Screenshots/Events2.jpg =100*100)
-
+   <div align="center"> <img src="Screenshots/Event.jpg" width="200" /> </div>
+   
+   <div align="center"> <img src="Screenshots/Event2.jpg" width="200" /> </div>
 - [Map] 
-   ![Map](./Screenshots/Map.jpg =100*100)
+   <div align="center"> <img src="Screenshots/Map.jpg" width="00" /> </div>
 
 ## Notes
    There app is not completed just the front end have been developed, More modifications are Coming soon.
