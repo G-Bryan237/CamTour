@@ -26,7 +26,8 @@ In the output, you'll find options to open the app in a
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Screens
-- [Home] 
+- [Home]
+- <div align="center"> <img src="Screenshots/Home.jpg" width="300" /> </div> ```
    ![Home](./Screenshots/Home.jpg =100*100)
 
 - [Events] 
